@@ -695,7 +695,7 @@ java packageb.ClassB
 На рис. 1.1 показано, где в структуре каталогов были созданы файлы .class.
 
 #### Рис. 1.1 - Компиляция с пакетами
-![img.png](img.png)
+![img.png](https://github.com/ilyaizvekov/ocp_java17/blob/main/.idea/chapters/images/figure%201.1.PNG)
 
 ### Компиляция в другой каталог
 
