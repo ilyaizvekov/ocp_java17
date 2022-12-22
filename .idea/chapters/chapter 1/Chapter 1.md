@@ -665,7 +665,7 @@ www.coderanch.com/forums/f-33/java
 |----:|:----:|:----------|
 | 1. Создать первый класс. | C:\temp\packagea\ClassA.java | /tmp/packagea/ClassA.java |
 | 2. Создать второй класс. | C:\temp\packageb\ClassB.java | /tmp/packageb/ClassB.java |
-| 3. Перейти в каталог.    | cd C:\temp | cd /tmp |
+| 3. Перейти в каталог.    |          cd C:\temp          |        cd /tmp            |
 
 Теперь пришло время скомпилировать код. К счастью, это одинаково независимо от операционной системы. Для компиляции 
 введите следующую команду:
