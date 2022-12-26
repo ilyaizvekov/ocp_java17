@@ -701,7 +701,7 @@ java packageb.ClassB
 На рис. 1.1 показано, где в структуре каталогов были созданы файлы .class.
 
 #### Рис. 1.1 - Компиляция с пакетами
-![img.png](https://github.com/ilyaizvekov/ocp_java17/blob/main/.idea/chapters/images/figure%201.1.PNG)
+![img.png](https://github.com/ilyaizvekov/ocp_java17/blob/main/.idea/chapters/chapter%201/image%201/figure%201.1.JPG)
 
 ### Компиляция в другой каталог
 
@@ -723,7 +723,7 @@ javac -d classes packagea/ClassA.java packageb/ClassB.java
 каталоге. На рис. 1.2 показана эта новая структура.
 
 #### Рис. 1.2 - Компиляция с пакетами и каталогами
-ссылку на рисунок!
+![img.png](https://github.com/ilyaizvekov/ocp_java17/blob/main/.idea/chapters/chapter%201/image%201/figure%201.2.JPG)
 
 Чтобы запустить программу, вы указываете путь к классам, чтобы Java знала, где найти классы. Есть три варианта, 
 которые вы можете использовать. Все три из них делают одно и то же:
@@ -1322,7 +1322,7 @@ String eyeTest = "\"Java Study Guide\"\n by Scott & Jeanne";
 См. рисунок 1.3 для эквивалента текстового блока.
 
 #### Рис. 1.3 - Текстовый блок
-
+![img.png](https://github.com/ilyaizvekov/ocp_java17/blob/main/.idea/chapters/chapter%201/image%201/figure%201.3.JPG)
 
 Текстовый блок начинается и заканчивается тремя двойными кавычками (" " "), и содержимое не нужно экранировать. Это 
 гораздо легче читать. Обратите внимание, что тип по-прежнему String. Это означает, что методы, о которых вы узнали в 
@@ -2089,7 +2089,7 @@ System.gc();
 быть назначен другому объекту, и объект не может быть передан методу или возвращен из метода. Это объект, который 
 собирает мусор, а не его ссылка.
 
-Вставить рисунок. Стр. 49 книги!
+![img.png](https://github.com/ilyaizvekov/ocp_java17/blob/main/.idea/chapters/chapter%201/image%201/figure%20obj-ref.JPG)
 
 ---
 
@@ -2120,6 +2120,7 @@ System.gc();
 как показано на рис. 1.4.
 
 #### Рис. 1.4 - Ваш рисунок после строки 5
+![img.png](https://github.com/ilyaizvekov/ocp_java17/blob/main/.idea/chapters/chapter%201/image%201/figure%201.4.JPG)
 
 В строке 6 переменная one изменяется и указывает на «b». Либо сотрите, либо зачеркните стрелку от **"единицы"** и нарисуйте 
 новую стрелку от **"единицы"** до «b». В строке 7 у нас есть новая переменная, поэтому напишите слово «три» и 
@@ -2134,6 +2135,7 @@ System.gc();
 метода в строке 9.
 
 #### Рис. 1.5 - Ваш рисунок после строки 7
+![img.png](https://github.com/ilyaizvekov/ocp_java17/blob/main/.idea/chapters/chapter%201/image%201/figure%201.5.JPG)
 
 ---
 ### Форматирование кода на экзамене (Code Formatting on the Exam)
