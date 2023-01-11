@@ -1380,14 +1380,14 @@ String eyeTest = "\"Java Study Guide\"\n by Scott & Jeanne";
 строке и текстовом блоке.
 
 #### Таблица 1.8 - Форматирование текстового блока
-|             Форматирование             |                        Значение в обычной строке                         |                 Значение в текстовом блоке                 |
-|:--------------------------------------:|:------------------------------------------------------------------------:|:----------------------------------------------------------:|
-|                   \"                   |                                    "                                     |                             "                              |
-|                  \"""                  |                              n/a – Invalid                               |                            """                             |
-|                 \"\"\"                 |                                   """                                    |                            """                             |
-|        Пробел (в конце строки)         |                                  Пробел                                  |                        Игнорируется                        |
-|                   \s                   | Два пробела (\s является пробелом и сохраняет начальный пробел в строке) |                        Два пробела                         |
-|           \ (в конце строки)           |                              n/a – Invalid                               |      Пропускает новую строку в этой строке                 |
+|     Форматирование      |                        Значение в обычной строке                         |      Значение в текстовом блоке       |
+|:-----------------------:|:------------------------------------------------------------------------:|:-------------------------------------:|
+|           \ "           |                                    "                                     |                   "                   |
+|         \ " " "         |                              n/a – Invalid                               |                 " " "                 |
+|       \ " \ " \ "       |                                  " " "                                   |                 " " "                 |
+| Пробел (в конце строки) |                                  Пробел                                  |             Игнорируется              |
+|           \s            | Два пробела (\s является пробелом и сохраняет начальный пробел в строке) |              Два пробела              |
+|   \ (в конце строки)    |                              n/a – Invalid                               | Пропускает новую строку в этой строке |
 
 Давайте попробуем несколько примеров. Во-первых, вы понимаете, почему это не компилируется?
 
@@ -1466,16 +1466,12 @@ String zooName = "The Best Zoo";
 
 #### Таблица 1.9 - Зарезервированные слова
 
-| abstract                 | assert    | boolean   | break        | byte       | case       |     catch |       char | class   |
-| const*                   | continue  | default   | do           | double     | else       |      enum |    extends | final   |
-| finally                  | float     | for       | goto*        | if         | implements |    import | instanceof | int     |
-| interface                | long      | native    | new          | package    | private    | protected |     public | return  |
-| short                    | static    | strictfp | super        | switch     |           |            |         |
-| synchronized             | this      | throw     | throws       | transient  |            |           |            |         |
-| try                      | void      | volatile  | while        |            |            |           |            |         |
-     
+abstract | assert | boolean | break | byte | case | catch | char | class | const* | continue | default | do | double else enum extends final
+finally float for goto* if implements import instanceof int interface long native new package private protected public 
+return short static strictfp super switch synchronized this throw throws transient try void volatile while
+
 ___
-'*' Зарезервированные слова const и goto фактически не используются в Java. Они зарезервированы для того, чтобы люди, 
+&#42; Зарезервированные слова const и goto фактически не используются в Java. Они зарезервированы для того, чтобы люди, 
 пришедшие из других языков программирования, не использовали их случайно — и, теоретически, на случай, если Java 
 однажды захочет их использовать.
 ---
