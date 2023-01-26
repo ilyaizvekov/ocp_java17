@@ -2246,3 +2246,166 @@ UnsupportedTemporalTypeException и жалуется, что мы пыталис
 
 ### Работа с длительностью
 
+Вы, наверное, уже заметили, что Period - это день или более времени. Существует также Duration, которая предназначена 
+для меньших единиц времени. В качестве Duration вы можете указать количество дней, часов, минут, секунд или наносекунд.
+И да, вы можете потратить 365 дней, чтобы сделать год, но вы действительно не должны — для этого и существует Period.
+
+Удобно, что Duration работает примерно так же, как Period, за исключением того, что он используется с объектами, у 
+которых есть время. Duration выводится, начиная с PT, которую вы можете рассматривать как период времени. 
+Duration хранится в часах, минутах и секундах. Количество секунд включает доли секунды.
+
+Мы можем создать Duration, используя несколько различных уровней детализации:
+
+```
+var daily = Duration.ofDays(1);                 // PT24H
+var hourly = Duration.ofHours(1);               // PT1H
+var everyMinute = Duration.ofMinutes(1);        // PT1M
+var everyTenSeconds = Duration.ofSeconds(10);   // PT10S
+var everyMilli = Duration.ofMillis(1);          // PT0.001S
+var everyNano = Duration.ofNanos(1);            // PT0.000000001S
+```
+
+У Duration нет фабричного метода, который принимает несколько единиц измерения, как это делает Period. Если вы хотите, 
+чтобы что-то происходило каждые полтора часа, вы указываете 90 минут.
+
+Duration включает ещё один более общий фабричный метод. Он принимает число и TemporalUnit. Идея, скажем, что-то 
+вроде «5 секунд». Однако TemporalUnit — это интерфейс. На данный момент существует только одна реализация ChronoUnit.
+
+Предыдущий пример можно было бы переписать так:
+
+```
+var daily = Duration.of(1, ChronoUnit.DAYS);
+var hourly = Duration.of(1, ChronoUnit.HOURS);
+var everyMinute = Duration.of(1, ChronoUnit.MINUTES);
+var everyTenSeconds = Duration.of(10, ChronoUnit.SECONDS);
+var everyMilli = Duration.of(1, ChronoUnit.MILLIS);
+var everyNano = Duration.of(1, ChronoUnit.NANOS);
+var everyNano = Duration.of(1, ChronoUnit.NANOS);
+```
+
+ChronoUnit также включает в себя некоторые удобные единицы измерения, такие как ChronoUnit.HALF_DAYS, представляющие 
+12 часов.
+
+---
+
+#### ChronoUnit для различий
+
+ChronoUnit — отличный способ определить, насколько далеко друг от друга находятся два временных значения. 
+Temporal включает LocalDate, LocalTime и т. д. ChronoUnit находится в пакете java.time.temporal.
+
+```
+var one = LocalTime.of(5, 15);
+var two = LocalTime.of(6, 30);
+var date = LocalDate.of(2016, 1, 20);
+System.out.println(ChronoUnit.HOURS.between(one, two));     // 1
+System.out.println(ChronoUnit.MINUTES.between(one, two));   // 75
+System.out.println(ChronoUnit.MINUTES.between(one, date));  // DateTimeException
+```
+
+Первый оператор печати показывает, что between усекает, а не округляет. Второй показывает, насколько легко считать в 
+разных единицах измерения. Просто измените тип ChronoUnit. Последнее напоминает нам, что Java выдаст исключение, если 
+мы перепутаем то, что можно сделать с объектами даты и времени.
+
+Кроме того, вы можете усечь любой объект с элементом времени. Например:
+
+```
+LocalTime time = LocalTime.of(3,12,45);
+System.out.println(time);             // 03:12:45
+LocalTime truncated = time.truncatedTo(ChronoUnit.MINUTES);
+System.out.println(truncated);        // 03:12
+```
+
+В этом примере обнуляются все поля меньше минут. В нашем случае он избавляется от секунд.
+
+---
+
+Использование Duration работает так же, как и использование Period. Например:
+
+```
+7: var date = LocalDate.of(2022, 1, 20);
+8: var time = LocalTime.of(6, 15);
+9: var dateTime = LocalDateTime.of(date, time);
+10: var duration = Duration.ofHours(6);
+11: System.out.println(dateTime.plus(duration));   // 2022–01–20T12:15
+12: System.out.println(time.plus(duration));       // 12:15
+13: System.out.println(
+14: date.plus(duration));    // UnsupportedTemporalTypeException
+```
+
+Строка 11 показывает, что мы можем добавить часы к LocalDateTime, поскольку оно содержит время. Строка 12 тоже работает,
+поскольку все, что у нас есть, — это время. Строка 13 не работает, потому что мы не можем добавить часы к объекту, 
+который не содержит времени.
+
+Давайте попробуем еще раз, но на этот раз добавим 23 часа.
+
+```
+7: var date = LocalDate.of(2022, 1, 20);
+8: var time = LocalTime.of(6, 15);
+9: var dateTime = LocalDateTime.of(date, time);
+10: var duration = Duration.ofHours(23);
+11: System.out.println(dateTime.plus(duration));  // 2022–01–21T05:15
+12: System.out.println(time.plus(duration));      // 05:15
+13: System.out.println(
+14:    date.plus(duration));   // UnsupportedTemporalTypeException
+```
+
+На этот раз мы видим, что Java продвигается вперед к концу дня. Строка 11 переходит на следующий день, так как мы 
+минуем полночь. В строке 12 нет дня, поэтому время просто поворачивается — совсем как на настоящих часах.
+
+### Period vs. Duration
+
+Помните, что Period и Duration не эквивалентны. В этом примере показаны Period и Duration одинаковой длины:
+
+```
+var date = LocalDate.of(2022, 5, 25);
+var period = Period.ofDays(1);
+var days = Duration.ofDays(1);
+
+System.out.println(date.plus(period)); // 2022–05–26
+System.out.println(date.plus(days)); // Unsupported unit: Seconds
+```
+
+#### Таблица 4.7. - Где использовать Duration и Period
+
+|                                    | Можно использовать с Period?  | Можно использовать с Duration? | 
+|:----------------------------------:|:-----------------------------:|:------------------------------:|
+|             LocalDate              |              Yes              |               No               | 
+|           LocalDateTime            |              Yes              |              Yes               |
+|             LocalTime              |              No               |              Yes               | 
+|           ZonedDateTime            |              Yes              |              Yes               |
+
+### Работа с Instants
+
+Класс Instant представляет определенный момент времени в часовом поясе GMT. Предположим, что вы хотите запустить таймер:
+
+```
+var now = Instant.now();
+// do something time consuming
+var later = Instant.now();
+
+var duration = Duration.between(now, later);
+System.out.println(duration.toMillis()); // Returns number milliseconds
+```
+
+В нашем случае “что-то отнимающее много времени” заняло чуть больше секунды, и программа напечатала 1025.
+
+Если у вас есть ZonedDateTime, вы можете превратить его в Instant:
+
+```
+var date = LocalDate.of(2022, 5, 25);
+var time = LocalTime.of(11, 55, 00);
+var zone = ZoneId.of("US/Eastern");
+var zonedDateTime = ZonedDateTime.of(date, time, zone);
+var instant = zonedDateTime.toInstant();      // 2022–05–25T15:55:00Z
+System.out.println(zonedDateTime);            // 2022–05–25T11:55–04:00[US/Eastern]
+System.out.println(instant);                  // 202–05–25T15:55:00Z
+```
+
+Последние две строки представляют один и тот же момент времени. ZonedDateTime включает часовой пояс. Instant избавляется
+от часового пояса и превращает его в Instant временя по Гринвичу.
+
+Вы не можете преобразовать LocalDateTime в Instant. Помните, что Instant — это момент времени. LocalDateTime не содержит 
+часовой пояс, поэтому во всем мире он не признается одним и тем же моментом времени.
+
+### Учет перехода на летнее время
+
