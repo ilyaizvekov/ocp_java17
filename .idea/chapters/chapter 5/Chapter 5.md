@@ -223,18 +223,18 @@ String hike8(int a) {
 
 ```
 public class Measurement {
- int getHeight1() {
-    int temp = 9;
-    return temp;
- }
- int getHeight2() {
-    int temp = 9L;   // DOES NOT COMPILE
-    return temp;
- }
- int getHeight3() {
-    long temp = 9L;
-    return temp;     // DOES NOT COMPILE
- }
+   int getHeight1() {
+      int temp = 9;
+      return temp;
+   }
+   int getHeight2() {
+      int temp = 9L;   // DOES NOT COMPILE
+      return temp;
+   }
+   int getHeight3() {
+      long temp = 9L;
+      return temp;     // DOES NOT COMPILE
+   }
 }
 ```
 
@@ -660,11 +660,93 @@ walkDog(1, null);   // Triggers NullPointerException in walkDog()
 Вы уже видели, что существует четыре модификатора доступа: private, package, protected и public.
 Мы собираемся обсудить их в порядке от наиболее ограничивающих к наименее ограничивающим:
 
++ private: Доступен только в пределах одного класса.
++ Package access: private плюс другие члены того же пакета. Иногда называют как package-private или default доступ
++ protected: Пакетный доступ плюс доступ внутри подклассов.
++ public: protected плюс классы в других пакетах.
+
+Мы рассмотрим влияние этих четырех уровней доступа на участников класса.
+
+### Private доступ
+
+Давайте начнем с доступа private, который является самым простым. Только код в том же классе может вызывать private 
+методы или получать доступ к private полям.
+
+Во-первых, взгляните на рис. 5.2. Он показывает классы, которые вы будете использовать для изучения private и 
+packfge доступа. Большие прямоугольники — это названия пакетов. Меньшие коробки внутри них — это классы в каждом 
+пакете. Вы можете вернуться к этому рисунку, если хотите быстро увидеть, как соотносятся классы.
+
+#### Рис. 5.2 - Классы, используемые для отображения private и package access
 
 
+Это совершенно правильный код, потому что все является одним классом:
 
+```
+1: package pond.duck;
+2: public class FatherDuck {
+3:    private String noise = "quack";
+4:    private void quack() {
+5:       System.out.print(noise);     // private access is ok
+6:    }
+7: }
+```
 
+Пока всё хорошо. FatherDuck объявляет приватный метод quack() и использует приватную переменную экземпляра noise в 
+строке 5.
 
+Теперь мы добавим ещё один класс:
+
+```
+1: package pond.duck;
+2: public class BadDuckling {
+3:    public void makeNoise() {
+4:       var duck = new FatherDuck();
+5:       duck.quack();                  // DOES NOT COMPILE
+6:       System.out.print(duck.noise);  // DOES NOT COMPILE
+7:    }
+8: }
+```
+
+BadDuckling пытается получить доступ к переменной экземпляра и методу, к которому он не имеет никакого отношения. 
+В строке 5 он пытается получить доступ к private методу в другом классе. В строке 6 он пытается получить доступ к 
+private переменной экземпляра в другом классе. Оба генерируют ошибки компилятора. Плохой утенок!
+
+Нашему гадкому утёнку всего несколько дней, и он ещё ничего не знает. К счастью, вы знаете, что доступ к private членам 
+других классов запрещен, и вам нужно использовать другой тип доступа.
+
+_В предыдущем примере FatherDuck и BadDuckling находятся в отдельных файлах, но что, если бы они были объявлены в одном 
+и том же файле? Даже в этом случае код все равно не скомпилируется, так как Java запрещает доступ за пределами класса._
+
+### Package Access
+
+К счастью, MotherDuck более сговорчива в отношении того, что могут делать её утята. Она разрешает классам в том же 
+пакете доступ к своим членам. Когда модификатор доступа отсутствует, Java предполагает пакетный доступ.
+
+```
+package pond.duck;
+public class MotherDuck {
+   String noise = "quack";
+   void quack() {
+      System.out.print(noise);   // package access is ok
+   }
+}
+```
+
+MotherDuck может ссылаться на noise и вызывать quack(). В конце концов, члены одного класса находятся в одном пакете.
+Большая разница заключается в том, что MotherDuck позволяет другим классам в том же пакете получать доступ к членам, в 
+то время как FatherDuck этого не делает (из-за того, что он private). У GoodDuckling гораздо лучший опыт, чем 
+у BadDuckling:
+
+```
+package pond.duck;
+public class GoodDuckling {
+   public void makeNoise() {
+      var duck = new MotherDuck();
+      duck.quack();                  // package access is ok
+      System.out.print(duck.noise);  // package access is ok
+   }
+}
+```
 
 
 
