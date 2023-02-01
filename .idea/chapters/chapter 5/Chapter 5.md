@@ -748,11 +748,78 @@ public class GoodDuckling {
 }
 ```
 
+GoodDuckling успешно учится quack() и издавать noise, копируя свою мать. Обратите внимание, что все классы, рассмотренные 
+до сих пор, находятся в одном пакете pond.duck. Это позволяет получить доступ к пакету для работы.
+
+В этом же пруду лебедь только что родила детеныша лебедя. Детеныш лебедя называется лебедёнок. Лебедёнок видит, как 
+утята учатся крякать, и решает тоже поучиться у MotherDuck.
+
+```
+package pond.swan;
+import pond.duck.MotherDuck;             // импортируем другой пакет
+public class BadCygnet {
+   public void makeNoise() {
+      var duck = new MotherDuck();
+      duck.quack();                      // DOES NOT COMPILE
+      System.out.print(duck.noise);      // DOES NOT COMPILE
+   }
+}
+```
+
+О, нет! MotherDuck разрешает уроки только другим уткам, ограничивая доступ к пакету pond.duck. Бедный маленький 
+BadCygnet находится в пакете pond.swan, и его код не компилируется. Помните, что когда у элемента нет модификатора 
+доступа, только классы в том же пакете могут получить доступ к элементу.
+
+### Protected доступ
+
+Protected доступ позволяет всё, что делает package access, и даже больше. Модификатор доступа protected добавляет 
+возможность доступа к членам родительского класса. Мы подробно рассмотрим создание подклассов в главе 6. Сейчас мы 
+рассмотрим простейшее возможное использование подкласса. В следующем примере «дочерний» класс ClownFish является 
+подклассом «родительского» класса Fish, для их соединения используется ключевое слово extends:
+
+```
+public class Fish {}
+
+public class ClownFish extends Fish {}
+```
+
+Расширяя класс, подкласс получает доступ ко всем protected и public членам родительского класса, как если бы 
+они были объявлены в подклассе. Если два класса находятся в одном пакете, то подкласс также получает доступ ко всем 
+членам пакета.
+
+На рисунке 5.3 показано множество классов, которые мы создаем в этом разделе. Существует множество классов и пакетов, 
+так что не беспокойтесь о том, чтобы держать их все в своей голове. Просто сверяйтесь с этим рисунком по ходу дела.
+
+#### Рис. 5.3 - Классы, используемые для отображения protected access
 
 
+Сначала создайте класс Bird и предоставьте protected доступ его членам:
 
+```
+package pond.shore;
+public class Bird {
+   protected String text = "floating";
+   protected void floatInWater() {
+      System.out.print(text);         // protected access is ok
+   }
+}
+```
 
+Далее создаем подкласс:
 
+```
+package pond.goose;                          // Different package than Bird
+import pond.shore.Bird;
+public class Gosling extends Bird {          // Gosling is a subclass of Bird
+   public void swim() {
+      floatInWater();                        // protected access is ok
+      System.out.print(text);                // protected access is ok
+   }
+   public static void main(String[] args) {
+      new Gosling().swim();
+   }
+}
+```
 
 
 
