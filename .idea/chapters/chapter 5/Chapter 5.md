@@ -800,7 +800,7 @@ package pond.shore;
 public class Bird {
    protected String text = "floating";
    protected void floatInWater() {
-      System.out.print(text);         // protected access is ok
+      System.out.print(text);            // protected access is ok
    }
 }
 ```
@@ -821,11 +821,74 @@ public class Gosling extends Bird {          // Gosling is a subclass of Bird
 }
 ```
 
+Это простой подкласс. Он расширяет(extends) класс Bird. Расширение означает создание подкласса, который имеет доступ к 
+любым protected или public членам родительского класса. Запуск этой программы дважды выводит float значения: один раз 
+из вызова floatInWater() и один раз из оператора печати в swim(). Поскольку Gosling является подклассом Bird, он может 
+получить доступ к этим членам, даже если он находится в другом пакете.
 
+Помните, что protected также дает нам доступ ко всему, что делает пакетный доступ(package access). Это означает, что 
+класс в том же пакете, что и Bird, может получить доступ к своим protected членам.
 
+```
+package pond.shore;                  // Same package as Bird
+public class BirdWatcher {
+   public void watchBird() {
+      Bird bird = new Bird();
+      bird.floatInWater();           // protected access is ok
+      System.out.print(bird.text);   // protected access is ok
+   }
+}
+```
 
+Поскольку Bird и BirdWatcher находятся в одном пакете, BirdWatcher может получить доступ к членам пакета переменной bird. 
+Определение protected разрешает доступ к подклассам и классам в одном пакете. В этом примере используется та же часть 
+пакета, что и в этом определении.
 
+Теперь давайте попробуем то же самое из другого пакета:
 
+```
+package pond.inland;                  // Different package than Bird
+import pond.shore.Bird;
+public class BirdWatcherFromAfar {    // Not a subclass of Bird
+   public void watchBird() {
+      Bird bird = new Bird();
+      bird.floatInWater();            // DOES NOT COMPILE
+      System.out.print(bird.text);    // DOES NOT COMPILE
+   }
+}
+```
+
+BirdWatcherFromAfar не находится в том же пакете, что и Bird, и не наследуется от Bird. Это означает, что доступ к 
+protected членам Bird запрещен.
+
+Поняли это? Только подклассы и классы в одном пакете имеют доступ к protected членам.
+
+Есть одна уловка для protected доступа. Рассмотрим этот класс:
+
+```
+1: package pond.swan;                        // Different package than Bird
+2: import pond.shore.Bird;
+3: public class Swan extends Bird {          // Swan is a subclass of Bird
+4:    public void swim() {
+5:       floatInWater();                     // protected access is ok
+6:       System.out.print(text);             // protected access is ok
+7:    }
+8:    public void helpOtherSwanSwim() {
+9:       Swan other = new Swan();
+10:      other.floatInWater();               // subclass access to superclass
+11:      System.out.print(other.text);       // subclass access to superclass
+12:   }
+13:   public void helpOtherBirdSwim() {
+14:      Bird other = new Bird();
+15:      other.floatInWater();               // DOES NOT COMPILE
+16:      System.out.print(other.text);       // DOES NOT COMPILE
+17:   }
+18: }
+```
+
+Сделайте глубокий вдох. Это интересно. Swan находится не в том же пакете, что и Bird, но расширяет его, что означает, 
+что он имеет доступ к protected членам Bird, поскольку он является подклассом. И это так. Строки 5 и 6 относятся к 
+protected членам посредством их наследования.
 
 
 
