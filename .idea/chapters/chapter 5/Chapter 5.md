@@ -1128,3 +1128,81 @@ System.out.println(Snake.hiss);
 Надеемся, вы ответили на 5. Переменная шипения только одна, так как она статическая. Он устанавливается на 4, затем на 6 и, наконец, на 5. Все переменные Snake просто отвлекают внимание.
 
 ### Class vs. Instance Membership
+
+Есть ещё один способ, с помощью которого создатели экзамена попытаются обмануть вас в отношении static членов и 
+элементов-экземпляров. Static член не может вызывать член экземпляра без ссылки на экземпляр класса. Это не должно быть 
+сюрпризом, поскольку static не требует существования каких-либо экземпляров класса.
+
+Следующая распространенная ошибка, которую совершают программисты-новички:
+
+```
+public class MantaRay {
+   private String name = "Sammy";
+   public static void first() { }
+   public static void second() { }
+   public void third() { System.out.print(name); }
+   public static void main(String args[]) {
+      first();
+      second();
+      third();   // DOES NOT COMPILE
+   }
+}
+```
+
+Компилятор выдаст вам ошибку о создании static ссылки на метод экземпляра. Если мы исправим это, добавив static в 
+функцию Third(), мы создадим новую проблему. Вы можете понять, что это такое?
+
+```
+public static void third() { System.out.print(name); }   // DOES NOT COMPILE
+```
+
+Все, что это делает, - это перемещает проблему. Теперь Third() ссылается на имя переменной экземпляра. Есть два способа исправить это. 
+Во-первых, нужно также добавить static в переменную name.
+
+```
+public class MantaRay {
+   private static String name = "Sammy";
+   ...
+   public static void third() { System.out.print(name); }
+   ...
+}
+```
+
+Вторым решением было бы вызвать third() в качестве метода экземпляра и не использовать static для метода или переменной.
+
+```
+public class MantaRay {
+   private String name = "Sammy";
+   ...
+   public void third() { System.out.print(name); }
+   public static void main(String args[]) {
+      ...
+      var ray = new MantaRay();
+      ray.third();
+   }
+}
+```
+
+Создателям экзамена эта тема очень нравится. Static метод или метод экземпляра может вызывать static метод, потому что 
+static методы не требуют использования объекта. Только метод экземпляра может вызывать другой метод экземпляра в том же 
+классе без использования ссылочной переменной, потому что для методов экземпляра требуется объект. Аналогичная логика 
+применима к экземпляру и static переменным.
+
+Предположим, у нас есть класс Giraffe: 
+
+```
+public class Giraffe {
+   public void eat(Giraffe g) {}
+   public void drink() {};
+   public static void allGiraffeGoHome(Giraffe g) {}
+   public static void allGiraffeComeOut() {}
+}
+```
+
+Прежде чем продолжить, убедитесь, что вы поняли таблицу 5.5.
+
+#### Таблица 5.5 - Статические и экземплярные вызовы (Static vs. instance calls)
+
+
+
+
