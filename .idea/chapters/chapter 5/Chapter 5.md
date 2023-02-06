@@ -1203,6 +1203,69 @@ public class Giraffe {
 
 #### Таблица 5.5 - Статические и экземплярные вызовы (Static vs. instance calls)
 
+| Метод              | Вызов               | Законно? |
+|:-------------------|:--------------------|:--------:|
+| allGiraffeGoHome() | allGiraffeComeOut() |   Yes    |                                    
+| allGiraffeGoHome() | drink()             |    No    |                                       
+| allGiraffeGoHome() | g.eat()             |   Yes    |
+| eat()              | allGiraffeComeOut() |   Yes    |
+| eat()              | drink()             |   Yes    |
+| eat()              | g.eat()             |   Yes    |
 
+Давайте попробуем еще один пример, чтобы у вас было больше практики в распознавании этого сценария. Понимаете ли вы, 
+почему следующие строки не компилируются?
+
+```
+1: public class Gorilla {
+2:    public static int count;
+3:    public static void addGorilla() { count++; }
+4:    public void babyGorilla() { count++; }
+5:    public void announceBabies() {
+6:       addGorilla();
+7:       babyGorilla();
+8:    }
+9:    public static void announceBabiesToEveryone() {
+10:      addGorilla();
+11:      babyGorilla();            // DOES NOT COMPILE
+12:   }
+13:   public int total;
+14:   public static double average
+15:      = total / count;          // DOES NOT COMPILE
+16: }
+```
+
+Строки 3 и 4 подходят, потому что и static методы, и методы экземпляра могут ссылаться на static переменную. 
+Строки 5–8 хороши, потому что метод экземпляра может вызывать static метод. Строка 11 не компилируется, потому что 
+static метод не может вызвать метод экземпляра. Точно так же строка 15 не компилируется, потому что static переменная 
+пытается использовать переменную экземпляра.
+
+Часто static переменные используются для подсчета количества экземпляров:
+
+```
+public class Counter {
+   private static int count;
+   public Counter() { count++; }
+   public static void main(String[] args) {
+      Counter c1 = new Counter();
+      Counter c2 = new Counter();
+      Counter c3 = new Counter();
+      System.out.println(count); // 3
+   }
+}
+```
+
+Каждый раз, когда вызывается конструктор, он увеличивает count на единицу. Этот пример основан на том факте, что static 
+(и экземплярные) переменные автоматически инициализируются значением по умолчанию для этого типа, которое равно 0 для 
+int. См. главу 1, чтобы просмотреть значения по умолчанию.
+
+Также обратите внимание, что мы не написали Counter.count. Мы могли бы. В этом нет необходимости, потому что мы уже 
+находимся в этом классе, поэтому компилятор может сделать вывод.
+
+Убедитесь, что вы действительно хорошо понимаете этот раздел. Об этом говорится на протяжении всей этой книги. Вы даже 
+столкнетесь с подобной темой, когда мы будем говорить об интерфейсах в главе 7. Например, метод static интерфейса не 
+может вызывать метод интерфейса default без ссылки, во многом так же, как внутри класса static метод не может вызывать 
+метод экземпляра без ссылки.
+
+### static модификаторы переменных
 
 
