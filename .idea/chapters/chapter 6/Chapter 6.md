@@ -1124,6 +1124,69 @@ MouseHouse(String), который, как мы видели, компилиру
 4. Обработайте все инициализаторы экземпляров в том порядке, в котором они появляются в классе.
 5. Инициализируйте конструктор, включая любые перегруженные конструкторы, на которые ссылается this().
 
+Давайте попробуем пример без наследования. Посмотрите, сможете ли вы понять, что выводит следующее приложение:
+
+```
+1: public class ZooTickets {
+2:    private String name = "BestZoo";
+3:    { System.out.print(name + "-"); }
+4:    private static int COUNT = 0;
+5:    static { System.out.print(COUNT + "-"); }
+6:    static { COUNT += 10; System.out.print(COUNT + "-"); }
+7:
+8:    public ZooTickets() {
+9:       System.out.print("z-");
+10:   }
+11:
+12:   public static void main(String... patrons) {
+13:      new ZooTickets();
+14:   } }
+```
+
+Вывод следующий:
+
+```
+0-10-BestZoo-z
+```
+
+Во-первых, мы должны инициализировать класс. Поскольку суперкласс не объявлен, что означает, что суперклассом является 
+Object, мы можем начать со static компонентов ZooTickets. В этом случае выполняются строки 4, 5 и 6, печатая 0- и 10-. 
+Затем мы инициализируем экземпляр, созданный в строке 13. Опять же, поскольку суперкласс не объявлен, мы начинаем с 
+компонентов экземпляра. Выполняются строки 2 и 3, что выводит BestZoo-. Наконец, мы запускаем конструктор в строках 
+8–10, который выводит z-.
+
+Далее давайте попробуем простой пример с наследованием:
+
+```
+class Primate {
+   public Primate() {
+      System.out.print("Primate-");
+   } }
+   
+class Ape extends Primate {
+   public Ape(int fur) {
+      System.out.print("Ape1-");
+   }
+   public Ape() {
+      System.out.print("Ape2-");
+   } }
+ 
+public class Chimpanzee extends Ape {
+   public Chimpanzee() {
+      super(2);
+      System.out.print("Chimpanzee-");
+   }
+   public static void main(String[] args) {
+      new Chimpanzee();
+   } }
+```
+
+Компилятор вставляет команду super() в качестве первого оператора конструкторов Primate и Ape. Код будет выполняться с 
+первым вызовом родительских конструкторов и даст следующий результат:
+
+```
+Primate-Ape1-Chimpanzee
+```
 
 
 
