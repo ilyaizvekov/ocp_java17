@@ -742,3 +742,325 @@ public interface Supplier<T> {
 }
 ```
 
+Вы можете создать объект LocalDate, используя фабричный метод now(). В этом примере показано, как использовать Supplier 
+для вызова этой фабрики:
+
+```
+Supplier<LocalDate> s1 = LocalDate::now;
+Supplier<LocalDate> s2 = () -> LocalDate.now();
+
+LocalDate d1 = s1.get();
+LocalDate d2 = s2.get();
+
+System.out.println(d1); // 2022-02-20
+System.out.println(d2); // 2022-02-20
+```
+
+В этом примере дата печатается дважды. Это также хорошая возможность просмотреть ссылки на static методы. Ссылка на 
+метод LocalDate::now используется для создания Supplier для назначения промежуточной переменной s1. Supplier часто 
+используется при создании новых объектов. Например, мы можем напечатать два пустых объекта StringBuilder:
+
+```
+Supplier<StringBuilder> s1 = StringBuilder::new;
+Supplier<StringBuilder> s2 = () -> new StringBuilder();
+
+System.out.println(s1.get()); // Empty string
+System.out.println(s2.get()); // Empty string
+```
+
+На этот раз мы использовали ссылку на конструктор для создания объекта. Мы использовали дженерики, чтобы объявить, 
+какой тип Supplier мы используем. Это может быть немного долго читать. Можете ли вы понять, что делает следующее? 
+Просто делайте это по одному шагу за раз:
+
+```
+Supplier<ArrayList<String>> s3 = ArrayList::new;
+ArrayList<String> a1 = s3.get();
+System.out.println(a1); // []
+```
+
+У нас есть Supplier определенного типа. Этот тип оказывается ArrayList<String>. Затем вызов get() создает новый 
+экземпляр ArrayList<String>, который является универсальным типом Supplier, другими словами, универсальным, 
+содержащим другой универсальный тип. Обязательно внимательно посмотрите на код, когда возникнет такая вещь.
+
+Обратите внимание, как мы вызвали get() в функциональном интерфейсе. Что произойдет, если мы попытаемся 
+распечатать сам s3?
+
+```
+System.out.println(s3);
+```
+
+Код печатает примерно следующее:
+
+```
+functionalinterface.BuiltIns$$Lambda$1/0x0000000800066840@4909b8da
+```
+
+Это результат вызова toString() для лямбды. Фу. Это действительно что-то значит. Наш тестовый класс называется 
+BuiltIns, и он находится в созданном нами пакете с именем функциональный интерфейс. Затем идет $$, что означает, что 
+класс не существует в файле класса в файловой системе. Он существует только в памяти. Вам не нужно беспокоиться об 
+остальном.
+
+### Реализация Consumer и BiConsumer
+
+Вы используете Consumer, когда хотите что-то сделать с параметром, но ничего не возвращать. BiConsumer делает то же 
+самое, за исключением того, что принимает два параметра. Интерфейсы определяются следующим образом:
+
+```
+@FunctionalInterface
+public interface Consumer<T> {
+   void accept(T t);
+   // omitted default method
+}
+
+@FunctionalInterface
+public interface BiConsumer<T, U> {
+   void accept(T t, U u);
+   // omitted default method
+}
+```
+
+_Вы заметите эту закономерность. Bi означает два. Оно пришло из латыни, но вы можете запомнить его из английских слов, 
+таких как двоичный (binary) (0 или 1) или велосипед (bicycle) (два колеса). Всегда добавляйте еще один параметр, 
+когда видите Bi._
+
+Печать — это обычное использование интерфейса Consumer:
+
+```
+Consumer<String> c1 = System.out::println;
+Consumer<String> c2 = x -> System.out.println(x);
+
+c1.accept("Annie"); // Annie
+c2.accept("Annie"); // Annie
+```
+
+BiConsumer вызывается с двумя параметрами. Они не должны быть одного типа. Например, мы можем поместить ключ и значение 
+на карту, используя этот интерфейс:
+
+```
+var map = new HashMap<String, Integer>();
+BiConsumer<String, Integer> b1 = map::put;
+BiConsumer<String, Integer> b2 = (k, v) -> map.put(k, v);
+
+b1.accept("chicken", 7);
+b2.accept("chick", 1);
+
+System.out.println(map); // {chicken=7, chick=1}
+```
+
+Вывод {chicken=7, chick=1} показывает, что были вызваны обе реализации BiConsumer. При объявлении b1 мы использовали 
+ссылку на метод экземпляра объекта, поскольку мы хотим вызвать метод на локальной переменной map. Код для создания 
+экземпляра b1 немного короче, чем код для b2. Наверное, поэтому на экзамене так любят ссылки на методы.
+
+В качестве другого примера мы используем один и тот же тип для обоих общих параметров:
+
+```
+var map = new HashMap<String, String>();
+BiConsumer<String, String> b1 = map::put;
+BiConsumer<String, String> b2 = (k, v) -> map.put(k, v);
+
+b1.accept("chicken", "Cluck");
+b2.accept("chick", "Tweep");
+
+System.out.println(map); // {chicken=Cluck, chick=Tweep}
+```
+
+Это показывает, что BiConsumer может использовать один и тот же тип для общих параметров T и U.
+
+### Реализация Predicate и BiPredicate
+
+Predicate часто используется при фильтрации или сопоставлении. Обе операции являются обычными. BiPredicate похож на 
+Predicate, за исключением того, что он принимает два параметра вместо одного. Интерфейсы определяются следующим образом:
+
+```
+@FunctionalInterface
+public interface Predicate<T> {
+boolean test(T t);
+// omitted default and static methods
+}
+
+@FunctionalInterface
+public interface BiPredicate<T, U> {
+boolean test(T t, U u);
+// omitted default methods
+}
+```
+
+Вы можете использовать Predicate для проверки условия.
+
+```
+Predicate<String> p1 = String::isEmpty;
+Predicate<String> p2 = x -> x.isEmpty();
+
+System.out.println(p1.test("")); // true
+System.out.println(p2.test("")); // true
+```
+
+Это печатает true дважды. Более интересным является BiPredicate. Этот пример также печатает true дважды:
+
+```
+BiPredicate<String, String> b1 = String::startsWith;
+BiPredicate<String, String> b2 =
+   (string, prefix) -> string.startsWith(prefix);
+
+System.out.println(b1.test("chicken", "chick")); // true
+System.out.println(b2.test("chicken", "chick")); // true
+```
+
+Ссылка на метод включает как переменную экземпляра, так и параметр для startWith(). Это хороший пример того, как ссылки 
+на методы экономят много времени. Недостатком является то, что они менее явные, и вам действительно нужно понимать, 
+что происходит!
+
+### Реализация Function и BiFunction
+
+Function отвечает за превращение одного параметра в значение потенциально другого типа и его возврат. Точно так же 
+BiFunction отвечает за преобразование двух параметров в значение и его возврат. Интерфейсы определяются следующим 
+образом:
+
+```
+@FunctionalInterface
+public interface Function<T, R> {
+R apply(T t);
+// omitted default and static methods
+}
+
+@FunctionalInterface
+public interface BiFunction<T, U, R> {
+R apply(T t, U u);
+// omitted default method
+}
+```
+
+Например, эта функция преобразует String в длину String:
+
+```
+Function<String, Integer> f1 = String::length;
+Function<String, Integer> f2 = x -> x.length();
+
+System.out.println(f1.apply("cluck")); // 5
+System.out.println(f2.apply("cluck")); // 5
+```
+
+Эта функция превращает String в Integer. Ну, технически это превращает String в int, который автоматически упаковывается
+в Integer. Типы не должны быть разными. Следующее объединяет два объекта String и создает еще одну строку:
+
+```
+BiFunction<String, String, String> b1 = String::concat;
+BiFunction<String, String, String> b2 =
+(string, toAdd) -> string.concat(toAdd);
+
+System.out.println(b1.apply("baby ", "chick")); // baby chick
+System.out.println(b2.apply("baby ", "chick")); // baby chick
+```
+
+Первые два типа в BiFunction являются входными типами. Третий тип результата. Для ссылки на метод первый параметр — это 
+экземпляр, для которого вызывается concat(), а второй передается в concat().
+
+### Реализация UnaryOperator и BinaryOperator
+
+UnaryOperator и BinaryOperator являются частными случаями Function. Они требуют, чтобы все параметры типа были одного 
+типа. UnaryOperator преобразует свое значение в значение того же типа. Например, увеличение на единицу — это унарная 
+операция. По сути, UnaryOperator расширяет Function. BinaryOperator объединяет два значения в одно одного типа. Сложение 
+двух чисел является бинарной операцией. Точно так же BinaryOperator расширяет BiFunction. Интерфейсы определяются 
+следующим образом:
+
+```
+@FunctionalInterface
+public interface UnaryOperator<T> extends Function<T, T> {
+   // omitted static method
+}
+
+@FunctionalInterface
+public interface BinaryOperator<T> extends BiFunction<T, T, T> {
+   // omitted static methods
+}
+```
+
+Это означает, что сигнатуры методов выглядят так:
+
+```
+T apply(T t); // UnaryOperator
+
+T apply(T t1, T t2); // BinaryOperator
+```
+
+В Javadoc вы заметите, что эти методы унаследованы от суперкласса Function/BiFunction. Общие объявления в подклассе 
+заставляют тип быть одинаковым. В унарном примере обратите внимание, что тип возвращаемого значения совпадает с типом 
+параметра.
+
+```
+UnaryOperator<String> u1 = String::toUpperCase;
+UnaryOperator<String> u2 = x -> x.toUpperCase();
+
+System.out.println(u1.apply("chirp")); // CHIRP
+System.out.println(u2.apply("chirp")); // CHIRP
+```
+
+Это печатает CHIRP дважды. Нам не нужно указывать возвращаемый тип в дженериках, потому что UnaryOperator требует, 
+чтобы он совпадал с параметром. А теперь бинарный пример:
+
+```
+BinaryOperator<String> b1 = String::concat;
+BinaryOperator<String> b2 = (string, toAdd) -> string.concat(toAdd);
+
+System.out.println(b1.apply("baby ", "chick")); // baby chick
+System.out.println(b2.apply("baby ", "chick")); // baby chick
+```
+
+Обратите внимание, что это делает то же самое, что и пример BiFunction. Код стал более лаконичным, что показывает 
+важность использования лучшего функционального интерфейса. Удобно иметь один общий тип вместо трех.
+
+### Проверка функциональных интерфейсов
+
+Очень важно знать количество параметров, типов, возвращаемого значения и имени метода для каждого из функциональных 
+интерфейсов. Сейчас самое время запомнить таблицу 8.4, если вы еще этого не сделали. Давайте сделаем несколько примеров 
+для практики.
+
+Какой функциональный интерфейс вы бы использовали в этих трех ситуациях?
+
++ Возвращает String без каких-либо параметров
++ Возвращает Boolean значение и принимает String
++ Возвращает Integer и принимает два Integers
+
+Готовы? Подумайте, каковы ваши ответы, прежде чем продолжить. Действительно. Вы должны знать этот холод. Хорошо. 
+Первый — это Supplier<String>, поскольку он создает объект и не принимает никаких параметров. Второй — это 
+Function<String,Boolean>, поскольку он принимает один параметр и возвращает другой тип. Это немного сложно. 
+Вы можете подумать, что это Predicate<String>. Обратите внимание, что Predicate возвращает boolean примитив, а не 
+Boolean объект.
+
+Наконец, третий — это либо BinaryOperator<Integer>, либо BiFunction<Integer,Integer,Integer>. Поскольку BinaryOperator 
+является частным случаем BiFunction, любой из них является правильным ответом. BinaryOperator<Integer> — лучший ответ 
+из двух, поскольку он более конкретен.
+
+Давайте попробуем это упражнение еще раз, но уже с кодом. С кодом сложнее. Первое, что вы делаете, это смотрите, 
+сколько параметров принимает лямбда и есть ли возвращаемое значение. Какой функциональный интерфейс вы бы использовали, 
+чтобы заполнить пробелы для них?
+
+```
+6: ______ <List> ex1 = x -> "".equals(x.get(0));
+7: ______ <Long> ex2 = (Long l) -> System.out.println(l);
+8: ______ <String, String> ex3 = (s1, s2) -> false;
+```
+
+Опять же, подумайте над ответами, прежде чем продолжить. Готовый? Строка 6 передает один параметр List в 
+лямбда-выражение и возвращает boolean значение. Это говорит нам, что это Predicate или Function. Поскольку универсальное 
+объявление имеет только один параметр, это Predicate.
+
+Строка 7 передает один Long параметр в лямбда-выражение и ничего не возвращает. Это говорит нам о том, что это Consumer. 
+Строка 8 принимает два параметра и возвращает boolean значение. Когда вы видите возвращаемое boolean значение, подумайте 
+о Predicate, если дженерики не указывают тип возвращаемого значения Boolean. В данном случае есть два параметра, так что 
+это BiPredicate.
+
+Вы находите это легким? Если нет, просмотрите Таблицу 8.4 еще раз. Мы не шутим. Таблицу нужно хорошо знать. Теперь, 
+когда вы только что изучили таблицу, мы поиграем в «найди ошибку». Они должны быть сложными:
+
+```
+6: Function<List<String>> ex1 = x -> x.get(0); // DOES NOT COMPILE
+7: UnaryOperator<Long> ex2 = (Long l) -> 3.14; // DOES NOT COMPILE
+```
+
+Строка 6 утверждает, что это Function. Function должна указать два универсальных типа: тип входного параметра и тип 
+возвращаемого значения. В строке 6 отсутствует тип возвращаемого значения, из-за чего код не компилируется. Строка 7 
+представляет собой UnaryOperator, который возвращает тот же тип, что и переданный. Пример возвращает значение типа 
+double, а не тип Long, из-за чего код не компилируется.
+
+### Using Convenience Methods on Functional Interfaces
