@@ -844,14 +844,14 @@ jar -cvf myNewFile.jar -C dir .
 элемента:
 
 ```
-package structure; // package must be first non-comment
-import java.util.*; // import must come after package
+package structure; // пакет должен быть первым, без комментариев
+import java.util.*; // импорт должен идти после упаковки
 
-public class Meerkat { // then comes the class
-   double weight; // fields and methods can go in either order
+public class Meerkat { // затем начинается класс
+   double weight; // поля и методы могут идти в любом порядке
    public double getWeight() {
        return weight; }
-   double height; // another field -they don't need to be together
+   double height; // другое поле - им не обязательно быть вместе
 }
 ```
 
@@ -871,9 +871,9 @@ public class Meerkat { }
 
 ```
 import java.util.*;
-package structure; // DOES NOT COMPILE
-String name; // DOES NOT COMPILE
-public class Meerkat { } // DOES NOT COMPILE
+package structure; // НЕ КОМПИЛИРУЕТСЯ
+String name; // НЕ КОМПИЛИРУЕТСЯ
+public class Meerkat { } // НЕ КОМПИЛИРУЕТСЯ
 ```
 
 Здесь есть две проблемы. Во-первых, операторы package и import меняются местами. Хотя оба являются необязательными, 
@@ -924,7 +924,7 @@ public class Chick {
 
 ```
 public class Chick {
-  public void Chick() { } // NOT A CONSTRUCTOR
+  public void Chick() { } // НЕ КОНСТРУКТОР
 }
 ```
 
@@ -937,11 +937,11 @@ public class Chick {
 
 ```
 public class Chicken {
-    int numEggs = 12; // initialize on line
+    int numEggs = 12; // инициализация в строке
     String name;
     
     public Chicken() {
-       name = "Duke"; // initialize in constructor
+       name = "Duke"; // инициализация в конструкторе 
      }
 }
 ```
@@ -957,12 +957,12 @@ public class Chicken {
 
 ```
 public class Swan {
-    int numberEggs;     // instance variable
+    int numberEggs;     // переменная экземпляра
     
     public static void main(String[] args) {
         Swan mother = new Swan();
-        mother.numberEggs = 1;    // set variable
-        System.out.println(mother.numberEggs);    // read variable
+        mother.numberEggs = 1;    // установить переменную
+        System.out.println(mother.numberEggs);    // чтение переменной
     }
 }
 ```
@@ -984,7 +984,7 @@ public class Swan {
 Строки 2 и 3 записывают в поля. Строка 4 читает и записывает данные. Он читает поля первым и последним. Затем он пишет 
 поле заполнено.
 
-### Executing Instance Initializer Blocks (Выполнение блоков инициализатора экземпляра)
+### Выполнение блоков инициализатора экземпляра
 
 Когда вы узнали о методах, вы увидели фигурные скобки ({}). Код между фигурными скобками (иногда называемый «внутри 
 фигурных скобок») называется блоком кода. Везде, где вы видите фигурные скобки, это блок кода.
