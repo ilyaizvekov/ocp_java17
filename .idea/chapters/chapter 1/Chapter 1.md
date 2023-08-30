@@ -1465,14 +1465,18 @@ String zooName = "The Best Zoo";
 
 #### Таблица 1.9 - Зарезервированные слова
 
-abstract | assert | boolean | break | byte | case | catch | char | class | const* | continue | default | do | double else enum extends final
-finally float for goto* if implements import instanceof int interface long native new package private protected public 
-return short static strictfp super switch synchronized this throw throws transient try void volatile while
+abstract | assert | boolean | break | byte | case | catch | char | class | const* | continue | default | do | double | 
+else | enum | extends | final | finally | float | for | goto* | if | implements | import | instanceof | int | interface | 
+long | native | new | package | private | protected | public | return | short | static | strictfp | super | switch | 
+synchronized | this | throw | throws | transient | try | void | volatile | while |
+
 
 ___
+
 &#42; Зарезервированные слова const и goto фактически не используются в Java. Они зарезервированы для того, чтобы люди, 
 пришедшие из других языков программирования, не использовали их случайно — и, теоретически, на случай, если Java 
 однажды захочет их использовать.
+
 ---
 
 Есть и другие имена, которые вы не можете использовать. Например, true, false и null — это буквальные значения, поэтому 
