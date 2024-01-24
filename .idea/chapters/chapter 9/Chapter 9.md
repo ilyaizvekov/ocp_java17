@@ -450,7 +450,7 @@ var list3 = new ArrayList<String>(10);
 ```
 var strings = new ArrayList<String>();
 strings.add("a");
-for (String s: strings) {  }
+for (String s : strings) {  }
 ```
 
 Тип переменной — ArrayList<String>. Это означает, что вы можете добавить String или перебрать объекты String. Что, если 
@@ -468,7 +468,7 @@ var list = new ArrayList<>();
 ```
 var list = new ArrayList<>();
 list.add("a");
-for (String s: list) { } // НЕ КОМПИЛИРУЕТСЯ
+for (String s : list) { } // НЕ КОМПИЛИРУЕТСЯ
 ```
 
 Тип переменной var — ArrayList<Object>. Поскольку daimond оператор не имеет типа, Java должен использовать самый общий 
@@ -539,8 +539,10 @@ System.out.println(numbers);   // [2, 4, 6]
 
 ```
 31: var list = new LinkedList<Integer>(); 
-32: list.add(3); 33: list.add(2); 
-34: list.add(1); 35: list.remove(2); 
+32: list.add(3);
+33: list.add(2); 
+34: list.add(1);
+35: list.remove(2); 
 36: list.remove(Integer.valueOf(2)); 
 37: System.out.println(list);
 ```
