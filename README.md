@@ -3,5 +3,5 @@
 
 ## Оглавление
 
-1. [Строительные блоки] (https://github.com/ilyaizvekov/ocp_java17/blob/main/.idea/chapters/chapter%201/Chapter%201.md)
-2. [Операторы] (https://github.com/ilyaizvekov/ocp_java17/blob/main/.idea/chapters/chapter%202/Chapter%202.md)
+1. [Строительные блоки] [https://github.com/ilyaizvekov/ocp_java17/blob/main/.idea/chapters/chapter%201/Chapter%201.md]
+2. [Операторы] [https://github.com/ilyaizvekov/ocp_java17/blob/main/.idea/chapters/chapter%202/Chapter%202.md]
