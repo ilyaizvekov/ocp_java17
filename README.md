@@ -7,7 +7,7 @@
 2. <a href="https://github.com/ilyaizvekov/ocp_java17/blob/main/.idea/chapters/chapter%202/Chapter%202.md">Операторы</a>
 3. <a href="https://github.com/ilyaizvekov/ocp_java17/blob/main/.idea/chapters/chapter%203/Chapter%203.md">Принятие решений</a>
 4. <a href="https://github.com/ilyaizvekov/ocp_java17/blob/main/.idea/chapters/chapter%204/Chapter%204.md">Основные API</a>
-5. <a href="https://github.com/ilyaizvekov/ocp_java17/blob/main/.idea/chapters/chapter%205/Chapter%205.md">Принятие решений</a>
+5. <a href="https://github.com/ilyaizvekov/ocp_java17/blob/main/.idea/chapters/chapter%205/Chapter%205.md">Методы</a>
 6. <a href="https://github.com/ilyaizvekov/ocp_java17/blob/main/.idea/chapters/chapter%206/Chapter%206.md">Проектирование классов</a>
 7. <a href="https://github.com/ilyaizvekov/ocp_java17/blob/main/.idea/chapters/chapter%207/Chapter%207.md">За пределами классов</a>
 8. <a href="https://github.com/ilyaizvekov/ocp_java17/blob/main/.idea/chapters/chapter%208/Chapter%208.md">Лямбды и Функциональные интерфейсы</a>
